@@ -47,7 +47,7 @@ docker service create --name contamehistorias \
 --replicas 2 \
 --network my_network 329719/contamehistorias \
 ```
-Create NGINX services :
+Create NGINX service :
 ```bash
 docker service create --name nginx --replicas 1 \ 
 --publish published=80,target=80 --network my_network \  
