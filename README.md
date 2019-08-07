@@ -32,3 +32,24 @@ Create a docker network from the node manager :
 ```bash
 docker network create -d overlay my_network
 ```
+Build NGINX image :
+```bash
+docker build -t nginx ./nginx-docker
+```
+Then using ssh add nginx.conf on each node :
+```bash
+docker-machine ssh <node_name> "touch /home/docker-user/nginx.conf"
+docker-machine scp nginx.conf <node_name>:/home/docker-user/nginx.conf
+```
+Create tools services, for example :
+```bash
+docker service create --name contamehistorias \
+--replicas 2 \
+--network my_network 329719/contamehistorias \
+```
+Create NGINX services :
+```bash
+docker service create --name nginx --replicas 1 \ 
+--publish published=80,target=80 --network my_network \  
+--mount type=bind,src=/home/docker-user/nginx.conf,dst=/etc/nginx/nginx.conf nginx \
+```
