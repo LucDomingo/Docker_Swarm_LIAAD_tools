@@ -41,7 +41,7 @@ Then using ssh add nginx.conf on each node :
 docker-machine ssh <node_name> "touch /home/docker-user/nginx.conf"
 docker-machine scp nginx.conf <node_name>:/home/docker-user/nginx.conf
 ```
-Create tools services, for example :
+Create tools services, using [services.sh]() for example :
 ```bash
 docker service create --name contamehistorias \
 --replicas 2 \
