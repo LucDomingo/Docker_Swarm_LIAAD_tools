@@ -53,3 +53,11 @@ docker service create --name nginx --replicas 1 \
 --publish published=80,target=80 --network my_network \  
 --mount type=bind,src=/home/docker-user/nginx.conf,dst=/etc/nginx/nginx.conf nginx \
 ```
+Create a firewall rule to allow users to access TCP port 80 : 
+```bash
+gcloud compute firewall-rules create nginx-rule \
+    --network default \
+    --action allow \
+    --direction ingress \
+    --rules tcp:80 \
+    ```
