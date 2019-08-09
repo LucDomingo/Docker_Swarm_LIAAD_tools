@@ -47,12 +47,6 @@ docker service create --name contamehistorias \
 --replicas 2 \
 --network my_network 329719/contamehistorias \
 ```
-Create NGINX service :
-```bash
-docker service create --name nginx --replicas 1 \ 
---publish published=80,target=80 --network my_network \  
---mount type=bind,src=/home/docker-user/nginx.conf,dst=/etc/nginx/nginx.conf nginx \
-```
 Create a firewall rule to allow users to access TCP port 80 : 
 ```bash
 gcloud compute firewall-rules create nginx-rule \
@@ -60,4 +54,11 @@ gcloud compute firewall-rules create nginx-rule \
     --action allow \
     --direction ingress \
     --rules tcp:80 \
-    ```
+```
+Create NGINX service listenning port 80 :
+```bash
+docker service create --name nginx --replicas 1 \ 
+--publish published=80,target=80 --network my_network \  
+--mount type=bind,src=/home/docker-user/nginx.conf,dst=/etc/nginx/nginx.conf nginx \
+```
+
