@@ -41,11 +41,9 @@ Then using ssh add nginx.conf on each node :
 docker-machine ssh <node_name> "touch /home/docker-user/nginx.conf"
 docker-machine scp nginx.conf <node_name>:/home/docker-user/nginx.conf
 ```
-Create tools services, using [services.sh]() for example :
+Create tools services :
 ```bash
-docker service create --name contamehistorias \
---replicas 2 \
---network my_network 329719/contamehistorias \
+./services.sh
 ```
 Create a firewall rule to allow users to access TCP port 80 : 
 ```bash
@@ -60,6 +58,25 @@ Create NGINX service listenning port 80 :
 docker service create --name nginx --replicas 1 \ 
 --publish published=80,target=80 --network my_network \  
 --mount type=bind,src=/home/docker-user/nginx.conf,dst=/etc/nginx/nginx.conf nginx \
+```
+## Add a new tool
+Create a new service using container image from docker hub :
+```bash
+docker service create --name <name> \
+--replicas <number> \
+--network my_network <image_name> \
+```
+Edit nginx.conf adding : 
+```bash
+  location ~ /<tools>/(.*)$ {
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET,POST';
+    proxy_pass  http://<tools>/$1;
+  }
+```
+Update nginx.conf on each node : 
+```bash
+./update_file.sh
 ```
 ## Test
 To access to swagger documentation request [http://<external_ip>/<tools_name>/apidocs/]().
